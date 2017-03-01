@@ -27,6 +27,7 @@ namespace EventReportTool
     public class EventReportAutoTamper:IAutoTamper
     {
         private const string MyouHost = "myou.cvte.com";
+        private const string Url = "myou.cvte.com/friday/agent/api/app/v2/report";
         private EventReportControl eventReportControl;
 
         public void OnLoad()
@@ -50,7 +51,7 @@ namespace EventReportTool
             //throw new NotImplementedException();
             //if (oSession.host == MyouHost &&
             //    oSession.url.Contains("http://myou.cvte.com/friday/agent/api/app/v2/report"))
-            if (oSession.host == MyouHost)
+            if (oSession.host == MyouHost && oSession.url== Url)
             {
                 var requestBody = oSession.RequestBody;
                 var stream=new MemoryStream(requestBody);
@@ -60,6 +61,7 @@ namespace EventReportTool
                 var model = JsonConvert.DeserializeObject<EventModel>(text);
                 if (model != null)
                 {
+                    FiddlerApplication.Log.LogString(oSession.url);
                     foreach (var dict in model.SP)
                     {
                         string eventItem = String.Empty;
